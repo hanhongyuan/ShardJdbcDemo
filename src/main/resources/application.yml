@@ -31,3 +31,7 @@ sharding:
     url1: jdbc:mysql://192.168.56.76:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
     username1: yinsl
     password1: Abcd_1234!
+spring:
+  redis:
+    host: 192.168.56.75
+    port: 6379

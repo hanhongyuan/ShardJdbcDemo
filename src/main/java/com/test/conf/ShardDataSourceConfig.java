@@ -24,6 +24,7 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.test.id.OrderIdGenerator;
 import com.test.sharding.ModuloDatabaseShardingAlgorithm;
 import com.test.sharding.ModuloTableShardingAlgorithm;
 
@@ -53,7 +54,7 @@ public class ShardDataSourceConfig {
 		ds.setTestOnReturn(shardDataSourceProperties.isTestOnReturn());
 		ds.setPoolPreparedStatements(shardDataSourceProperties.isPoolPreparedStatements());
 		ds.setMaxPoolPreparedStatementPerConnectionSize(
-				shardDataSourceProperties.getMaxPoolPreparedStatementPerConnectionSize());
+		        shardDataSourceProperties.getMaxPoolPreparedStatementPerConnectionSize());
 		ds.setRemoveAbandoned(shardDataSourceProperties.isRemoveAbandoned());
 		ds.setRemoveAbandonedTimeout(shardDataSourceProperties.getRemoveAbandonedTimeout());
 		ds.setLogAbandoned(shardDataSourceProperties.isLogAbandoned());
@@ -85,26 +86,36 @@ public class ShardDataSourceConfig {
 		return dataSourceRule;
 	}
 
+	private TableRule userTableRule() throws SQLException {
+		TableRule userTableRule = TableRule.builder("t_user").autoIncrementColumns("user_id", OrderIdGenerator.class)
+				.databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
+		        .dataSourceRule(dataSourceRule()).build();
+		return userTableRule;
+	}
+	
 	private TableRule orderTableRule() throws SQLException {
-		TableRule orderTableRule = TableRule.builder("t_order").actualTables(Arrays.asList("t_order_0", "t_order_1"))
-				.dataSourceRule(dataSourceRule()).build();
+		TableRule orderTableRule = TableRule.builder("t_order").autoIncrementColumns("order_id", OrderIdGenerator.class)
+		        .actualTables(Arrays.asList("t_order_0", "t_order_1")).dataSourceRule(dataSourceRule()).build();
 		return orderTableRule;
 	}
 
 	private TableRule orderItemTableRule() throws SQLException {
 		TableRule orderItemTableRule = TableRule.builder("t_order_item")
-				.actualTables(Arrays.asList("t_order_item_0", "t_order_item_1")).dataSourceRule(dataSourceRule())
-				.build();
+		        .autoIncrementColumns("item_id", OrderIdGenerator.class)
+		        .actualTables(Arrays.asList("t_order_item_0", "t_order_item_1")).dataSourceRule(dataSourceRule())
+		        .databaseShardingStrategy(new DatabaseShardingStrategy("order_id", new ModuloDatabaseShardingAlgorithm()))
+		        .tableShardingStrategy(new TableShardingStrategy("item_id", new ModuloTableShardingAlgorithm()))
+		        .build();
 		return orderItemTableRule;
 	}
 
 	private ShardingRule shardingRule() throws SQLException {
 		ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(dataSourceRule())
-				.tableRules(Arrays.asList(orderTableRule(), orderItemTableRule()))
-				.databaseShardingStrategy(
-						new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
-				.tableShardingStrategy(new TableShardingStrategy("order_id", new ModuloTableShardingAlgorithm()))
-				.build();
+		        .tableRules(Arrays.asList(userTableRule(), orderTableRule(), orderItemTableRule()))
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
+		        .tableShardingStrategy(new TableShardingStrategy("order_id", new ModuloTableShardingAlgorithm()))
+		        .build();
 		return shardingRule;
 	}
 
@@ -112,18 +123,18 @@ public class ShardDataSourceConfig {
 	public DataSource dataSource() throws SQLException {
 		return ShardingDataSourceFactory.createDataSource(shardingRule());
 	}
-	
-	@Bean
-    public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource());
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mybatis/*.xml"));
-        return sqlSessionFactoryBean.getObject();
-    }
 
-    @Bean
-    public PlatformTransactionManager transactionManager() throws SQLException {
-        return new DataSourceTransactionManager(dataSource());
-    }
+	@Bean
+	public SqlSessionFactory sqlSessionFactoryBean() throws Exception {
+		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+		sqlSessionFactoryBean.setDataSource(dataSource());
+		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+		sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mybatis/*.xml"));
+		return sqlSessionFactoryBean.getObject();
+	}
+
+	@Bean
+	public PlatformTransactionManager transactionManager() throws SQLException {
+		return new DataSourceTransactionManager(dataSource());
+	}
 }
