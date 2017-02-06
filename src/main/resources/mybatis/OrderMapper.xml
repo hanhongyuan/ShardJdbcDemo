@@ -4,14 +4,15 @@
 	<resultMap id="BaseResultMap" type="com.test.model.Order">
 		<id column="order_id" property="orderId" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="order_amount" property="orderAmount" jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getOrderListByUserId" resultMap="BaseResultMap"
 		parameterType="int">
-		select order_id, user_id from t_order where
+		select order_id, user_id, order_amount from t_order where
 		user_id=#{userId}
 	</select>
 	<insert id="createOrder" parameterType="com.test.model.Order">
 		insert into
-		t_order(user_id, order_id) values (#{userId}, #{orderId})
+		t_order(user_id, order_id, order_amount) values (#{userId}, #{orderId}, #{orderAmount})
 	</insert>
 </mapper>

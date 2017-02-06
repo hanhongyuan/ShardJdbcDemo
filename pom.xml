@@ -15,7 +15,7 @@
 	<properties>
 		<java.version>1.8</java.version>
 		<druid.version>1.0.26</druid.version>
-		<sharding.jdbc.core.version>1.3.3</sharding.jdbc.core.version>
+		<sharding.jdbc.core.version>1.4.1</sharding.jdbc.core.version>
 		<mybatis.version>3.4.1</mybatis.version>
 		<mybatis.spring.version>1.3.0</mybatis.spring.version>
 	</properties>
@@ -24,6 +24,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-redis</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,6 +60,11 @@
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>${druid.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 
