@@ -1,6 +1,7 @@
 package com.test.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -8,10 +9,12 @@ import lombok.Data;
 @Data
 public class Order implements Serializable {
 
-	private int userId;
+	private Integer userId;
 
-	private int orderId;
+	private Integer orderId;
 
-    private int orderAmount;
+    private Integer orderAmount;
+    
+    private List<OrderItem> orderItemList;
 
 }

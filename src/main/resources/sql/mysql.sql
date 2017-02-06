@@ -1,4 +1,4 @@
-create database IF NOT EXISTS `test`;
+create database IF NOT EXISTS `test` DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
 use test;
 
@@ -29,7 +29,8 @@ DROP TABLE IF EXISTS `t_order_item_0`;
 CREATE TABLE `t_order_item_0` (
   `item_id`  INT NOT NULL,
   `order_id` INT NOT NULL,
-  `user_id`  INT NOT NULL,
+  `item_num` INT NOT NULL,
+  `item_name` VARCHAR(300),
   PRIMARY KEY (`item_id`)
 );
 
@@ -37,6 +38,7 @@ DROP TABLE IF EXISTS `t_order_item_1`;
 CREATE TABLE `t_order_item_1` (
   `item_id`  INT NOT NULL,
   `order_id` INT NOT NULL,
-  `user_id`  INT NOT NULL,
+  `item_num` INT NOT NULL,
+  `item_name` VARCHAR(300),
   PRIMARY KEY (`item_id`)
 );

@@ -8,6 +8,8 @@ public interface OrderMapper {
 	
 	List<Order> getOrderListByUserId(Integer userId);
 	
+	Order getOrderByOrderId(Integer orderId);
+	
 	void createOrder(Order order);
 
 }

@@ -1,35 +1,19 @@
 package com.test.model;
 
-public class OrderItem {
+import java.io.Serializable;
+
+import lombok.Data;
+
+@SuppressWarnings("serial")
+@Data
+public class OrderItem implements Serializable {
 	
-	private int itemId;
+	private Integer itemId;
 	
-	private int userId;
+	private Integer orderId;
 	
-	private int orderId;
-
-	public int getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
-
-	public int getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
-	}
+	private Integer itemNum;
+	
+	private String itemName;
 
 }

@@ -5,14 +5,26 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.test.mapper.OrderItemMapper;
 import com.test.mapper.OrderMapper;
 import com.test.model.Order;
+import com.test.model.OrderItem;
 
 @Service
 public class OrderService {
 	
 	@Autowired
 	private OrderMapper orderMapper;
+	
+	@Autowired
+	private OrderItemMapper orderItemMapper;
+	
+	public Order getOrderByOrderId(Integer orderId) {
+		Order order = orderMapper.getOrderByOrderId(orderId);
+		List<OrderItem> oiList = orderItemMapper.getOrderItemListByOrderId(orderId);
+		order.setOrderItemList(oiList);
+		return order;
+	}
 	
 	public List<Order> getOrderListByUserId(Integer userId) {
 		return orderMapper.getOrderListByUserId(userId);
