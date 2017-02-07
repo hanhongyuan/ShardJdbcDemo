@@ -27,7 +27,13 @@ public class OrderService {
 	}
 	
 	public List<Order> getOrderListByUserId(Integer userId) {
-		return orderMapper.getOrderListByUserId(userId);
+		List<Order> orderList = orderMapper.getOrderListByUserId(userId);
+		if (orderList != null) {
+			for (Order o : orderList) {
+				o.setOrderItemList(orderItemMapper.getOrderItemListByOrderId(o.getOrderId()));
+			}
+		}
+		return orderList;
 	}
 	
 	public void createOrder(Order order) {

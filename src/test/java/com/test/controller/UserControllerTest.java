@@ -32,5 +32,10 @@ public class UserControllerTest {
 		User user = mapper.readValue(body, User.class);
 		assertThat(user.getUserName()).isEqualTo("asqaaa");
 	}
+	
+	@Test
+	public void createUserTest() {
+		restTemplate.postForLocation("/user/aaa21", null);
+	}
 
 }
