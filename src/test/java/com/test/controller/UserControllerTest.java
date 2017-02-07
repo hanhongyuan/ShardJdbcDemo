@@ -34,6 +34,14 @@ public class UserControllerTest {
 	}
 	
 	@Test
+	public void getUserByUserIdFromMasterTest() throws JsonParseException, JsonMappingException, IOException {
+		String body = restTemplate.getForObject("/user/master/4", String.class);
+		ObjectMapper mapper = new ObjectMapper();
+		User user = mapper.readValue(body, User.class);
+		assertThat(user.getUserName()).isEqualTo("asq");
+	}
+	
+	@Test
 	public void createUserTest() {
 		restTemplate.postForLocation("/user/aaa21", null);
 	}

@@ -25,6 +25,11 @@ public class UserController {
 		return userService.getUserByUserId(userId);
 	}
 	
+	@RequestMapping(path="/master/{userId}", method={RequestMethod.GET})
+	public User getUserByUserIdFromMaster(@PathVariable("userId") Integer userId) {
+		return userService.getUserByUserIdFromMaster(userId);
+	}
+	
 	@RequestMapping(path="/{userName}", method={RequestMethod.POST})
 	public String createUser(@PathVariable("userName") String userName) {
 		User user = new User();
