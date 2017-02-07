@@ -1,6 +1,5 @@
 package com.test.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.id.OrderIdGenerator;
 import com.test.id.OrderItemIdGenerator;
 import com.test.model.Order;
@@ -57,22 +54,6 @@ public class OrderController {
 		}
 		
 		return "success";
-	}
-	
-	public static void main(String[] args) throws JsonProcessingException {
-		Order order = new Order();
-		order.setOrderAmount(100);
-		order.setUserId(1);
-		OrderItem oi = new OrderItem();
-		oi.setItemName("手机");
-		oi.setItemNum(2);
-        List<OrderItem> oiList = new ArrayList<>();
-		oiList.add(oi);
-		order.setOrderItemList(oiList);
-	
-		ObjectMapper mapper = new ObjectMapper();
-		String s = mapper.writeValueAsString(order);
-		System.out.println(s);
 	}
 
 }

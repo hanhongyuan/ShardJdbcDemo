@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
+import com.test.common.Constant;
 
 @Component
 public class OrderIdGenerator implements IdGenerator {
@@ -14,7 +15,7 @@ public class OrderIdGenerator implements IdGenerator {
 	
 	@Override
 	public Number generateId() {
-		return template.boundValueOps("order:id:generate").increment(1);
+		return template.boundValueOps(Constant.RedisConst.ID_GENERATOR_ORDER).increment(1);
 	}
 
 }
