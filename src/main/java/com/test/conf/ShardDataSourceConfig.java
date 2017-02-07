@@ -101,7 +101,7 @@ public class ShardDataSourceConfig {
 		Map<String, DataSource> dataSourceMap = new HashMap<>(2);
 		dataSourceMap.put("ds_0", msDs0);
 		dataSourceMap.put("ds_1", msDs1);
-		DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap);
+		DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap, "ds_0");
 		return dataSourceRule;
 	}
 
@@ -114,7 +114,10 @@ public class ShardDataSourceConfig {
 	
 	private TableRule orderTableRule() throws SQLException {
 		TableRule orderTableRule = TableRule.builder("t_order").autoIncrementColumns("order_id", OrderIdGenerator.class)
-		        .actualTables(Arrays.asList("t_order_0", "t_order_1")).dataSourceRule(dataSourceRule()).build();
+		        .actualTables(Arrays.asList("t_order_0", "t_order_1")).dataSourceRule(dataSourceRule())
+		        .databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
+		        .tableShardingStrategy(new TableShardingStrategy("order_id", new ModuloTableShardingAlgorithm()))
+		        .build();
 		return orderTableRule;
 	}
 
@@ -131,9 +134,6 @@ public class ShardDataSourceConfig {
 	private ShardingRule shardingRule() throws SQLException {
 		ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(dataSourceRule())
 		        .tableRules(Arrays.asList(userTableRule(), orderTableRule(), orderItemTableRule()))
-		        .databaseShardingStrategy(
-		                new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
-		        .tableShardingStrategy(new TableShardingStrategy("order_id", new ModuloTableShardingAlgorithm()))
 		        .build();
 		return shardingRule;
 	}

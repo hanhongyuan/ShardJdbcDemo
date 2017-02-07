@@ -9,20 +9,23 @@ import com.test.model.User;
 
 @Service
 public class UserService {
-	
+
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	public User getUserByUserId(Integer userId) {
 		return userMapper.getUserByUserId(userId);
 	}
-	
+
 	public User getUserByUserIdFromMaster(Integer userId) {
-		HintManager hintManager = HintManager.getInstance();
-		hintManager.setMasterRouteOnly();
-		return userMapper.getUserByUserId(userId);
+		try (HintManager hintManager = HintManager.getInstance();) {
+			hintManager.setMasterRouteOnly();
+			return userMapper.getUserByUserId(userId);
+		} catch (Exception e) {
+			throw e;
+		}
 	}
-	
+
 	public void createUser(User user) {
 		userMapper.createUser(user);
 	}

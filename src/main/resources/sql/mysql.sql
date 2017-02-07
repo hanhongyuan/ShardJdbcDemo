@@ -2,10 +2,18 @@ create database IF NOT EXISTS `test` DEFAULT CHARSET utf8 COLLATE utf8_general_c
 
 use test;
 
+DROP TABLE IF EXISTS `t_city`;
+CREATE TABLE `t_city` (
+  `city_id`  INT NOT NULL,
+  `city_name` VARCHAR(300),
+  PRIMARY KEY (`city_id`)
+);
+
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
   `user_id`  INT NOT NULL,
   `user_name` VARCHAR(300),
+  `city_id` INT,
   PRIMARY KEY (`user_id`)
 );
 
