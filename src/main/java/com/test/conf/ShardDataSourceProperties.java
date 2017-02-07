@@ -12,23 +12,29 @@ public class ShardDataSourceProperties {
 	
 	private String driverClassName;
 	
-	private String url;
+	private String masterUrl0;
 	
-	private String username;
+	private String masterUsername0;
 	
-	private String password;
+	private String masterPassword0;
 	
-	private String url0;
+	private String masterUrl1;
 	
-	private String username0;
+	private String masterUsername1;
 	
-	private String password0;
+	private String masterPassword1;
 	
-	private String url1;
+	private String slaveUrl0;
 	
-	private String username1;
+	private String slaveUsername0;
 	
-	private String password1;
+	private String slavePassword0;
+	
+	private String slaveUrl1;
+	
+	private String slaveUsername1;
+	
+	private String slavePassword1;
 	
 	private String filters;
 	

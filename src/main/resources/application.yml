@@ -3,9 +3,6 @@ server:
 sharding:
   jdbc: 
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.56.75:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
-    username: yinsl
-    password: Abcd_1234!
     filters: stat
     maxActive: 100
     initialSize: 1
@@ -24,13 +21,21 @@ sharding:
     logAbandoned: false
     connectionInitSqls: 
     
-    url0: jdbc:mysql://192.168.56.75:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
-    username0: yinsl
-    password0: Abcd_1234!
+    masterUrl0: jdbc:mysql://192.168.56.75:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    masterUsername0: yinsl
+    masterPassword0: Abcd_1234!
     
-    url1: jdbc:mysql://192.168.56.76:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
-    username1: yinsl
-    password1: Abcd_1234!
+    masterUrl1: jdbc:mysql://192.168.56.76:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    masterUsername1: yinsl
+    masterPassword1: Abcd_1234!
+    
+    slaveUrl0: jdbc:mysql://192.168.56.73:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    slaveUsername0: yinsl
+    slavePassword0: Abcd_1234!
+    
+    slaveUrl1: jdbc:mysql://192.168.56.74:3306/test?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&failOverReadOnly=false
+    slaveUsername1: yinsl
+    slavePassword1: Abcd_1234!
 spring:
   redis:
     host: 192.168.56.75

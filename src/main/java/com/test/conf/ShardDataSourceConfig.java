@@ -18,6 +18,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import com.dangdang.ddframe.rdb.sharding.api.MasterSlaveDataSourceFactory;
 import com.dangdang.ddframe.rdb.sharding.api.ShardingDataSourceFactory;
 import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
@@ -38,9 +39,9 @@ public class ShardDataSourceConfig {
 	private DruidDataSource parentDs() throws SQLException {
 		DruidDataSource ds = new DruidDataSource();
 		ds.setDriverClassName(shardDataSourceProperties.getDriverClassName());
-		ds.setUsername(shardDataSourceProperties.getUsername());
-		ds.setUrl(shardDataSourceProperties.getUrl());
-		ds.setPassword(shardDataSourceProperties.getPassword());
+//		ds.setUsername(shardDataSourceProperties.getUsername());
+//		ds.setUrl(shardDataSourceProperties.getUrl());
+//		ds.setPassword(shardDataSourceProperties.getPassword());
 		ds.setFilters(shardDataSourceProperties.getFilters());
 		ds.setMaxActive(shardDataSourceProperties.getMaxActive());
 		ds.setInitialSize(shardDataSourceProperties.getInitialSize());
@@ -62,26 +63,44 @@ public class ShardDataSourceConfig {
 		return ds;
 	}
 
-	private DataSource ds0() throws SQLException {
+	private DataSource mds0() throws SQLException {
 		DruidDataSource ds = parentDs();
-		ds.setUsername(shardDataSourceProperties.getUsername0());
-		ds.setUrl(shardDataSourceProperties.getUrl0());
-		ds.setPassword(shardDataSourceProperties.getPassword0());
+		ds.setUsername(shardDataSourceProperties.getMasterUsername0());
+		ds.setUrl(shardDataSourceProperties.getMasterUrl0());
+		ds.setPassword(shardDataSourceProperties.getMasterPassword0());
 		return ds;
 	}
 
-	private DataSource ds1() throws SQLException {
+	private DataSource mds1() throws SQLException {
 		DruidDataSource ds = parentDs();
-		ds.setUsername(shardDataSourceProperties.getUsername1());
-		ds.setUrl(shardDataSourceProperties.getUrl1());
-		ds.setPassword(shardDataSourceProperties.getPassword1());
+		ds.setUsername(shardDataSourceProperties.getMasterUsername1());
+		ds.setUrl(shardDataSourceProperties.getMasterUrl1());
+		ds.setPassword(shardDataSourceProperties.getMasterPassword1());
+		return ds;
+	}
+	
+	private DataSource sds0() throws SQLException {
+		DruidDataSource ds = parentDs();
+		ds.setUsername(shardDataSourceProperties.getSlaveUsername0());
+		ds.setUrl(shardDataSourceProperties.getSlaveUrl0());
+		ds.setPassword(shardDataSourceProperties.getSlavePassword0());
+		return ds;
+	}
+	
+	private DataSource sds1() throws SQLException {
+		DruidDataSource ds = parentDs();
+		ds.setUsername(shardDataSourceProperties.getSlaveUsername1());
+		ds.setUrl(shardDataSourceProperties.getSlaveUrl1());
+		ds.setPassword(shardDataSourceProperties.getSlavePassword1());
 		return ds;
 	}
 
 	private DataSourceRule dataSourceRule() throws SQLException {
+		DataSource msDs0 = MasterSlaveDataSourceFactory.createDataSource("ms_0", mds0(), sds0());
+		DataSource msDs1 = MasterSlaveDataSourceFactory.createDataSource("ms_1", mds1(), sds1());
 		Map<String, DataSource> dataSourceMap = new HashMap<>(2);
-		dataSourceMap.put("ds_0", ds0());
-		dataSourceMap.put("ds_1", ds1());
+		dataSourceMap.put("ds_0", msDs0);
+		dataSourceMap.put("ds_1", msDs1);
 		DataSourceRule dataSourceRule = new DataSourceRule(dataSourceMap);
 		return dataSourceRule;
 	}
