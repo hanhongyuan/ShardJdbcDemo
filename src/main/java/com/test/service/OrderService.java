@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.test.mapper.OrderItemMapper;
 import com.test.mapper.OrderMapper;
 import com.test.model.Order;
-import com.test.model.OrderItem;
 
 @Service
 public class OrderService {
@@ -21,8 +20,6 @@ public class OrderService {
 	
 	public Order getOrderByOrderId(Integer orderId) {
 		Order order = orderMapper.getOrderByOrderId(orderId);
-		List<OrderItem> oiList = orderItemMapper.getOrderItemListByOrderId(orderId);
-		order.setOrderItemList(oiList);
 		return order;
 	}
 	
