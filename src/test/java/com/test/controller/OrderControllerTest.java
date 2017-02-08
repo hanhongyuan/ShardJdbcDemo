@@ -18,8 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -33,16 +31,16 @@ public class OrderControllerTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-//	@Test
+	@Test
 	public void getOrderListByUserIdTest() throws JsonParseException, JsonMappingException, IOException {
-		String body = restTemplate.getForObject("/order/4", String.class);
+		String body = restTemplate.getForObject("/order/1", String.class);
 		ObjectMapper mapper = new ObjectMapper();
 		CollectionType listType = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Order.class);
 		List<Order> orderList = mapper.readValue(body, listType);
 		assertThat(orderList.size()).isEqualTo(2);
 	}
 	
-	@Test
+//	@Test
 	public void getOrderByOrderIdTest() throws JsonParseException, JsonMappingException, IOException {
 		String body = restTemplate.getForObject("/order/oid/4", String.class);
 		ObjectMapper mapper = new ObjectMapper();

@@ -46,7 +46,7 @@ public class UserControllerTest {
 		assertThat(user.getUserName()).isEqualTo("asq");
 	}
 	
-	@Test
+//	@Test
 	public void createUserTest() throws JsonProcessingException {
 		User user = new User();
 		user.setUserName("刘四");

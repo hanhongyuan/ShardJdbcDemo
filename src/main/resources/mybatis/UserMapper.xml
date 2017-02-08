@@ -4,7 +4,8 @@
 	<resultMap id="BaseResultMap" type="com.test.model.User">
 		<id column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
-		<result column="city_id" property="city.cityId" jdbcType="INTEGER" />
+		<association property="city" javaType="com.test.model.City"
+			column="city_id" select="com.test.mapper.CityMapper.getCityByCityId" />
 	</resultMap>
 	<select id="getUserByUserId" resultMap="BaseResultMap"
 		parameterType="int">
