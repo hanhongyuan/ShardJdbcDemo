@@ -14,6 +14,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<maven.test.skip>true</maven.test.skip>
 		<druid.version>1.0.26</druid.version>
 		<sharding.jdbc.core.version>1.4.1</sharding.jdbc.core.version>
 		<mybatis.version>3.4.1</mybatis.version>

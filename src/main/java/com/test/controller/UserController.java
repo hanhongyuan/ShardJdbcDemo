@@ -2,6 +2,7 @@ package com.test.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,11 +31,9 @@ public class UserController {
 		return userService.getUserByUserIdFromMaster(userId);
 	}
 	
-	@RequestMapping(path="/{userName}", method={RequestMethod.POST})
-	public String createUser(@PathVariable("userName") String userName) {
-		User user = new User();
+	@RequestMapping(method={RequestMethod.POST})
+	public String createUser(@RequestBody User user) {
 		user.setUserId(userIdGenerator.generateId().intValue());
-		user.setUserName(userName);
 		userService.createUser(user);
 		return "success";
 	}

@@ -4,14 +4,16 @@
 	<resultMap id="BaseResultMap" type="com.test.model.User">
 		<id column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="city_id" property="city.cityId" jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getUserByUserId" resultMap="BaseResultMap"
 		parameterType="int">
-		select user_id, user_name from t_user where
-		user_id=#{userId}
+		select user_id, user_name, city_id
+		  from t_user
+		 where user_id=#{userId}
 	</select>
 	<insert id="createUser" parameterType="com.test.model.User">
-		insert into
-		t_user(user_id, user_name) values (#{userId}, #{userName})
+		insert into t_user(user_id,   user_name,   city_id) 
+		           values (#{userId}, #{userName}, #{city.cityId})
 	</insert>
 </mapper>

@@ -25,7 +25,10 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
+import com.test.id.CityIdGenerator;
 import com.test.id.OrderIdGenerator;
+import com.test.id.OrderItemIdGenerator;
+import com.test.id.UserIdGenerator;
 import com.test.sharding.ModuloDatabaseShardingAlgorithm;
 import com.test.sharding.ModuloTableShardingAlgorithm;
 
@@ -39,9 +42,9 @@ public class ShardDataSourceConfig {
 	private DruidDataSource parentDs() throws SQLException {
 		DruidDataSource ds = new DruidDataSource();
 		ds.setDriverClassName(shardDataSourceProperties.getDriverClassName());
-//		ds.setUsername(shardDataSourceProperties.getUsername());
-//		ds.setUrl(shardDataSourceProperties.getUrl());
-//		ds.setPassword(shardDataSourceProperties.getPassword());
+		// ds.setUsername(shardDataSourceProperties.getUsername());
+		// ds.setUrl(shardDataSourceProperties.getUrl());
+		// ds.setPassword(shardDataSourceProperties.getPassword());
 		ds.setFilters(shardDataSourceProperties.getFilters());
 		ds.setMaxActive(shardDataSourceProperties.getMaxActive());
 		ds.setInitialSize(shardDataSourceProperties.getInitialSize());
@@ -78,7 +81,7 @@ public class ShardDataSourceConfig {
 		ds.setPassword(shardDataSourceProperties.getMasterPassword1());
 		return ds;
 	}
-	
+
 	private DataSource sds0() throws SQLException {
 		DruidDataSource ds = parentDs();
 		ds.setUsername(shardDataSourceProperties.getSlaveUsername0());
@@ -86,7 +89,7 @@ public class ShardDataSourceConfig {
 		ds.setPassword(shardDataSourceProperties.getSlavePassword0());
 		return ds;
 	}
-	
+
 	private DataSource sds1() throws SQLException {
 		DruidDataSource ds = parentDs();
 		ds.setUsername(shardDataSourceProperties.getSlaveUsername1());
@@ -106,16 +109,27 @@ public class ShardDataSourceConfig {
 	}
 
 	private TableRule userTableRule() throws SQLException {
-		TableRule userTableRule = TableRule.builder("t_user").autoIncrementColumns("user_id", OrderIdGenerator.class)
-				.databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
+		TableRule userTableRule = TableRule.builder("t_user").autoIncrementColumns("user_id", UserIdGenerator.class)
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
 		        .dataSourceRule(dataSourceRule()).build();
 		return userTableRule;
 	}
-	
+
+	private TableRule cityTableRule() throws SQLException {
+		TableRule cityTableRule = TableRule.builder("t_city")
+		        .autoIncrementColumns("city_id", CityIdGenerator.class)
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("city_id", new ModuloDatabaseShardingAlgorithm()))
+		        .dataSourceRule(dataSourceRule()).build();
+		return cityTableRule;
+	}
+
 	private TableRule orderTableRule() throws SQLException {
 		TableRule orderTableRule = TableRule.builder("t_order").autoIncrementColumns("order_id", OrderIdGenerator.class)
 		        .actualTables(Arrays.asList("t_order_0", "t_order_1")).dataSourceRule(dataSourceRule())
-		        .databaseShardingStrategy(new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("user_id", new ModuloDatabaseShardingAlgorithm()))
 		        .tableShardingStrategy(new TableShardingStrategy("order_id", new ModuloTableShardingAlgorithm()))
 		        .build();
 		return orderTableRule;
@@ -123,9 +137,10 @@ public class ShardDataSourceConfig {
 
 	private TableRule orderItemTableRule() throws SQLException {
 		TableRule orderItemTableRule = TableRule.builder("t_order_item")
-		        .autoIncrementColumns("item_id", OrderIdGenerator.class)
+		        .autoIncrementColumns("item_id", OrderItemIdGenerator.class)
 		        .actualTables(Arrays.asList("t_order_item_0", "t_order_item_1")).dataSourceRule(dataSourceRule())
-		        .databaseShardingStrategy(new DatabaseShardingStrategy("order_id", new ModuloDatabaseShardingAlgorithm()))
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("order_id", new ModuloDatabaseShardingAlgorithm()))
 		        .tableShardingStrategy(new TableShardingStrategy("item_id", new ModuloTableShardingAlgorithm()))
 		        .build();
 		return orderItemTableRule;
@@ -133,7 +148,7 @@ public class ShardDataSourceConfig {
 
 	private ShardingRule shardingRule() throws SQLException {
 		ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(dataSourceRule())
-		        .tableRules(Arrays.asList(userTableRule(), orderTableRule(), orderItemTableRule()))
+		        .tableRules(Arrays.asList(cityTableRule(), userTableRule(), orderTableRule(), orderItemTableRule()))
 		        .build();
 		return shardingRule;
 	}
