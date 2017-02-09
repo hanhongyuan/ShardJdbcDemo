@@ -5,15 +5,17 @@
 		<id column="item_id" property="itemId" jdbcType="INTEGER" />
 		<result column="order_id" property="orderId" jdbcType="INTEGER" />
 		<result column="item_num" property="itemNum" jdbcType="INTEGER" />
-		<result column="item_name" property="itemName" jdbcType="VARCHAR" />
+		<result column="item_price" property="itemPrice" jdbcType="INTEGER" />
+		<result column="product_id" property="productId" jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getOrderItemListByOrderId" resultMap="BaseResultMap"
 		parameterType="int">
-		select item_id, order_id, item_num, item_name 
+		select item_id, order_id, item_num, item_price, product_id 
 		  from t_order_item
 		 where order_id=#{orderId}
 	</select>
 	<insert id="createOrderItem" parameterType="com.test.model.OrderItem">
-		insert into t_order_item(item_id, order_id, item_num, item_name) values (#{itemId}, #{orderId}, #{itemNum}, #{itemName})
+		insert into t_order_item(item_id,   order_id,   item_num,   item_price,   product_id) 
+		                 values (#{itemId}, #{orderId}, #{itemNum}, #{itemPrice}, #{productId})
 	</insert>
 </mapper>

@@ -50,7 +50,7 @@ public class OrderControllerTest {
 
 //	@Test
 	public void createOrderTest() {
-		String json = "{\"userId\": 1,\"orderAmount\": 2011,\"orderItemList\": [{\"itemNum\": 2,\"itemName\": \"手机21\"}]}";
+		String json = "{\"userId\": 1,\"orderAmount\": 2011,\"orderItemList\": [{\"itemNum\": 2,\"itemPrice\": 120, \"productId\": 1}]}";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<String> request = new HttpEntity<String>(json, headers);

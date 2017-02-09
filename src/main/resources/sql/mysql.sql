@@ -38,7 +38,8 @@ CREATE TABLE `t_order_item_0` (
   `item_id`  INT NOT NULL,
   `order_id` INT NOT NULL,
   `item_num` INT NOT NULL,
-  `item_name` VARCHAR(300),
+  `item_price` INT NOT NULL,
+  `product_id` INT NOT NULL,
   PRIMARY KEY (`item_id`)
 );
 
@@ -47,6 +48,23 @@ CREATE TABLE `t_order_item_1` (
   `item_id`  INT NOT NULL,
   `order_id` INT NOT NULL,
   `item_num` INT NOT NULL,
-  `item_name` VARCHAR(300),
+  `item_price` INT NOT NULL,
+  `product_id` INT NOT NULL,
   PRIMARY KEY (`item_id`)
 );
+
+DROP TABLE IF EXISTS `t_product_0`;
+CREATE TABLE `t_product_0` (
+  `product_id`  INT NOT NULL,
+  `product_name` VARCHAR(300),
+  PRIMARY KEY (`product_id`)
+);
+
+DROP TABLE IF EXISTS `t_product_1`;
+CREATE TABLE `t_product_1` (
+  `product_id`  INT NOT NULL,
+  `product_name` VARCHAR(300),
+  PRIMARY KEY (`product_id`)
+);
+
+

@@ -24,9 +24,11 @@ import com.dangdang.ddframe.rdb.sharding.api.rule.DataSourceRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.ShardingRule;
 import com.dangdang.ddframe.rdb.sharding.api.rule.TableRule;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.database.DatabaseShardingStrategy;
+import com.dangdang.ddframe.rdb.sharding.api.strategy.database.NoneDatabaseShardingAlgorithm;
 import com.dangdang.ddframe.rdb.sharding.api.strategy.table.TableShardingStrategy;
 import com.test.id.OrderIdGenerator;
 import com.test.id.OrderItemIdGenerator;
+import com.test.id.ProductIdGenerator;
 import com.test.id.UserIdGenerator;
 import com.test.sharding.ModuloDatabaseShardingAlgorithm;
 import com.test.sharding.ModuloTableShardingAlgorithm;
@@ -104,6 +106,11 @@ public class ShardDataSourceConfig {
 		return dataSourceRule;
 	}
 
+	/**
+	 * 分库不分表
+	 * @return
+	 * @throws SQLException
+	 */
 	private TableRule userTableRule() throws SQLException {
 		TableRule userTableRule = TableRule.builder("t_user").autoIncrementColumns("user_id", UserIdGenerator.class)
 		        .databaseShardingStrategy(
@@ -112,6 +119,11 @@ public class ShardDataSourceConfig {
 		return userTableRule;
 	}
 
+	/**
+	 * city表不分库不分表，可以不配置
+	 * @return
+	 * @throws SQLException
+	 */
 //	private TableRule cityTableRule() throws SQLException {
 //		TableRule cityTableRule = TableRule.builder("t_city")
 //		        .autoIncrementColumns("city_id", CityIdGenerator.class)
@@ -121,6 +133,12 @@ public class ShardDataSourceConfig {
 //		return cityTableRule;
 //	}
 
+	/**
+	 * 分库分表
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
 	private TableRule orderTableRule() throws SQLException {
 		TableRule orderTableRule = TableRule.builder("t_order").autoIncrementColumns("order_id", OrderIdGenerator.class)
 		        .actualTables(Arrays.asList("t_order_0", "t_order_1")).dataSourceRule(dataSourceRule())
@@ -130,7 +148,27 @@ public class ShardDataSourceConfig {
 		        .build();
 		return orderTableRule;
 	}
+	
+	/**
+	 * 分表不分库
+	 * @return
+	 * @throws SQLException
+	 */
+	private TableRule productTableRule() throws SQLException {
+		TableRule productTableRule = TableRule.builder("t_product").autoIncrementColumns("product_id", ProductIdGenerator.class)
+		        .actualTables(Arrays.asList("t_product_0", "t_product_1")).dataSourceRule(dataSourceRule())
+		        .databaseShardingStrategy(
+		                new DatabaseShardingStrategy("product_id", new NoneDatabaseShardingAlgorithm()))
+		        .tableShardingStrategy(new TableShardingStrategy("product_id", new ModuloTableShardingAlgorithm()))
+		        .build();
+		return productTableRule;
+	}
 
+	/**
+	 * 分库分表
+	 * @return
+	 * @throws SQLException
+	 */
 	private TableRule orderItemTableRule() throws SQLException {
 		TableRule orderItemTableRule = TableRule.builder("t_order_item")
 		        .autoIncrementColumns("item_id", OrderItemIdGenerator.class)
@@ -144,7 +182,7 @@ public class ShardDataSourceConfig {
 
 	private ShardingRule shardingRule() throws SQLException {
 		ShardingRule shardingRule = ShardingRule.builder().dataSourceRule(dataSourceRule())
-		        .tableRules(Arrays.asList(/*cityTableRule(),*/ userTableRule(), orderTableRule(), orderItemTableRule()))
+		        .tableRules(Arrays.asList(/*cityTableRule(),*/ productTableRule(), userTableRule(), orderTableRule(), orderItemTableRule()))
 		        .build();
 		return shardingRule;
 	}

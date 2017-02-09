@@ -12,14 +12,14 @@ import com.test.Application;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-public class CityControllerTest {
+public class ProductControllerTest {
 	
 	@Autowired
 	private TestRestTemplate restTemplate;
 
 	@Test
 	public void createCityTest() {
-		restTemplate.postForLocation("/city/LuoTian", null);
+		restTemplate.postForLocation("/product/HuaWei", null);
 	}
 
 }
