@@ -16,6 +16,6 @@ public class OrderItem implements Serializable {
 	
 	private Integer itemPrice;
 	
-	private Integer productId;
+	private Product product;
 
 }

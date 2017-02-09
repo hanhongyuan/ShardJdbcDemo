@@ -19,7 +19,7 @@ public class ProductControllerTest {
 
 	@Test
 	public void createCityTest() {
-		restTemplate.postForLocation("/product/HuaWei", null);
+		restTemplate.postForLocation("/product/VIVO", null);
 	}
 
 }
